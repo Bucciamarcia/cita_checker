@@ -10,7 +10,9 @@
         "input_name_id": "txtDesCitado",
         "input_birth_id": "txtAnnoCitado",
         "country_dropdown_select_id": "txtPaisNac",
-        "cita_previa_enviar_id": "btnEnviar"
+        "cita_previa_enviar_id": "btnEnviar",
+        "solicitar_cita_id": "btnEnviar",
+        "dropdown_selection_cita": "idSede"
     },
     "names_path": "names.json"
 }

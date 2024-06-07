@@ -69,7 +69,7 @@ class Selenium:
         self.fill_input(
             By.ID,
             self.data["checker"]["input_name_id"],
-            Random.random_name(path=self.data["checker"]["names_path"]),
+            Random.random_name(path=self.data["names_path"]),
         )
         Time.random_sleep()
         self.fill_input(
@@ -83,6 +83,12 @@ class Selenium:
         )
         Time.random_sleep()
         self.click_element(By.ID, self.data["checker"]["cita_previa_enviar_id"])
+
+    def list_cita_options(self, by, value: str) -> list[str]:
+        dropdown_element = self.driver.find_element(by, value)
+        select = Select(dropdown_element)
+        options = select.options
+        return [option.text for option in options]
 
     def scrape_url(self):
         self.driver.get(self.data["url"])
@@ -100,3 +106,16 @@ class Selenium:
         self.click_element(By.ID, self.data["checker"]["entrar_1_id"])
         Time.random_sleep()
         self.compile_cita_previa()
+        Time.random_sleep()
+        self.click_element(By.ID, self.data["checker"]["solicitar_cita_id"])
+        self.check_visibility(By.ID, self.data["checker"]["dropdown_selection_cita"])
+        try:
+            cita_options = self.list_cita_options(
+                By.ID, self.data["checker"]["dropdown_selection_cita"]
+            )
+            if len(cita_options) > 1:
+                print(f"OPZIONI TROVATE: {cita_options}")
+            else:
+                print("NESSUNA OPZIONE TROVATA")
+        except Exception:
+            print("NESSUNA OPZIONE TROVATA")
