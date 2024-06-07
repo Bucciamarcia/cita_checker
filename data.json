@@ -2,6 +2,8 @@
     "url": "https://icp.administracionelectronica.gob.es/icpco/citar?p=35&locale=es",
     "checker": {
         "tramites_policia_nactional": "tramiteGrupo[1]",
-        "tramites_policia_nactional_select_value": "4031"
+        "tramites_policia_nactional_select_value": "4031",
+        "acceptar_1_id": "btnAceptar",
+        "entrar_1_id": "btnEntrar"
     }
 }

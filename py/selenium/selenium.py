@@ -25,12 +25,16 @@ class Selenium:
         except Exception as e:
             error_message(f"Element not found: {e}")
 
-    def click_element(self, by, value):
+    def click_element(self, by, value, wait=Time.random_sleep()):
         try:
             element = WebDriverWait(self.driver, 30).until(
                 EC.element_to_be_clickable((by, value))
             )
-            element.click()
+            wait
+            try:
+                element.click()
+            except Exception:
+                self.driver.execute_script("arguments[0].click();", element)
         except Exception as e:
             error_message(f"Element not clickable: {e}")
 
@@ -41,3 +45,6 @@ class Selenium:
         select = Select(select_element)
         select.select_by_value(self.data["checker"]["tramites_policia_nactional_select_value"])
         Time.random_sleep()
+        self.click_element(By.ID, self.data["checker"]["acceptar_1_id"])
+        Time.random_sleep()
+        self.click_element(By.ID, self.data["checker"]["entrar_1_id"])
