@@ -81,6 +81,7 @@ class Selenium:
         self.select_dropdown_by_visible_text(
             By.ID, self.data["checker"]["txtPaisNac"], "ITALIA"
         )
+        Time.random_sleep()
         self.click_element(By.ID, self.data["checker"]["cita_previa_enviar_id"])
 
     def scrape_url(self):
