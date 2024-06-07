@@ -33,17 +33,21 @@ class Selenium:
             wait
             try:
                 element.click()
-            except Exception:
+            except Exception:  # JS click if regular click doesn't work
                 self.driver.execute_script("arguments[0].click();", element)
         except Exception as e:
             error_message(f"Element not clickable: {e}")
 
     def scrape_url(self):
         self.driver.get(self.data["url"])
-        select_element = self.check_visibility(By.ID, self.data["checker"]["tramites_policia_nactional"])
+        select_element = self.check_visibility(
+            By.ID, self.data["checker"]["tramites_policia_nactional"]
+        )
         Time.random_sleep()
         select = Select(select_element)
-        select.select_by_value(self.data["checker"]["tramites_policia_nactional_select_value"])
+        select.select_by_value(
+            self.data["checker"]["tramites_policia_nactional_select_value"]
+        )
         Time.random_sleep()
         self.click_element(By.ID, self.data["checker"]["acceptar_1_id"])
         Time.random_sleep()
