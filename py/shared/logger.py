@@ -16,3 +16,9 @@ def get_logger(name):
     ch.setFormatter(formatter)
     logger.addHandler(ch)
     return logger
+
+
+def error_message(message):
+    logger = get_logger(__name__)
+    logger.error(message)
+    exit(1)
