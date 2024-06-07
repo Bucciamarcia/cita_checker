@@ -4,6 +4,13 @@
         "tramites_policia_nactional": "tramiteGrupo[1]",
         "tramites_policia_nactional_select_value": "4031",
         "acceptar_1_id": "btnAceptar",
-        "entrar_1_id": "btnEntrar"
-    }
+        "entrar_1_id": "btnEntrar",
+        "select_nie_id": "rdbTipoDocPas",
+        "input_nie_id": "txtIdCitado",
+        "input_name_id": "txtDesCitado",
+        "input_birth_id": "txtAnnoCitado",
+        "country_dropdown_select_id": "txtPaisNac",
+        "cita_previa_enviar_id": "btnEnviar"
+    },
+    "names_path": "names.json"
 }
