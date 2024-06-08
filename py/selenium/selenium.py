@@ -5,7 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from py.shared.time import Time
 from py.shared.data_reader import DataReader
@@ -15,9 +15,13 @@ from py.shared.random import Random
 class Selenium:
     def __init__(self):
         self.logger = get_logger(__name__)
-        self.service = Service(ChromeDriverManager().install())
-        self.driver = webdriver.Chrome(service=self.service)
         self.data = DataReader("data.json").read_json()
+        self.service = Service(ChromeDriverManager().install())
+        self.options = Options()
+        user_agent = self.data["user_agent"]
+        self.options.add_argument(f"user-agent={user_agent}")
+        self.driver = webdriver.Chrome(service=self.service, options=self.options)
+        self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
     def check_visibility(self, by, value):
         try:
@@ -77,7 +81,7 @@ class Selenium:
         )
         Time.random_sleep()
         self.select_dropdown_by_visible_text(
-            By.ID, self.data["checker"]["txtPaisNac"], "ITALIA"
+            By.ID, self.data["checker"]["country_dropdown_select_id"], "ITALIA"
         )
         Time.random_sleep()
         self.click_element(By.ID, self.data["checker"]["cita_previa_enviar_id"])
@@ -106,13 +110,13 @@ class Selenium:
         self.compile_cita_previa()
         Time.random_sleep()
         self.click_element(By.ID, self.data["checker"]["solicitar_cita_id"])
-        self.check_visibility(By.ID, self.data["checker"]["dropdown_selection_cita"])
+        self.check_visibility(By.CLASS_NAME, self.data["checker"]["check_finale"])
         try:
             cita_options = self.list_cita_options(
                 By.ID, self.data["checker"]["dropdown_selection_cita"]
             )
             if len(cita_options) > 1:
-                print(f"OPZIONI TROVATE: {cita_options}")
+                print(f"OPZIONI TROVATE: {', '.join(cita_options)}")
             else:
                 print("NESSUNA OPZIONE TROVATA")
         except Exception:
