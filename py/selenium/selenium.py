@@ -44,11 +44,9 @@ class Selenium:
         try:
             input_field = self.driver.find_element(by, value)
             input_field.clear()
-            actions = ActionChains(self.driver)
-            for char in text:
-                actions.send_keys(char)
-                actions.perform()
-                Time.random_sleep(0.02, 0.2)
+            for c in text:
+                input_field.send_keys(c)
+                Time.random_sleep(0.05, 0.2)
         except Exception as e:
             error_message(f"Input field not found: {e}")
 
@@ -75,7 +73,7 @@ class Selenium:
         self.fill_input(
             By.ID,
             self.data["checker"]["input_birth_id"],
-            Random.random_number(1960, 2000),
+            str(Random.random_number(1960, 2000)),
         )
         Time.random_sleep()
         self.select_dropdown_by_visible_text(
