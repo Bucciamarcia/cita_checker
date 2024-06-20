@@ -92,6 +92,9 @@ class Selenium:
         options = select.options
         return [option.text for option in options]
 
+    def check_options(self, options: list[str]) -> bool | list[str]:
+        viable_options = self.data["viable_options"]["asignacion_nie"]
+
     def scrape_url(self):
         self.driver.get(self.data["url"])
         select_element = self.check_visibility(
