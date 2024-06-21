@@ -21,7 +21,9 @@ class Selenium:
         user_agent = self.data["user_agent"]
         self.options.add_argument(f"user-agent={user_agent}")
         self.driver = webdriver.Chrome(service=self.service, options=self.options)
-        self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+        self.driver.execute_script(
+            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+        )
 
     def check_visibility(self, by, value):
         try:
@@ -92,10 +94,22 @@ class Selenium:
         options = select.options
         return [option.text for option in options]
 
-    def check_options(self, options: list[str]) -> bool | list[str]:
+    def check_available_options(self, options: list[str]) -> list[str]:
         viable_options = self.data["viable_options"]["asignacion_nie"]
+        available_options = [o for o in options if o in viable_options]
+        return available_options
 
-    def scrape_url(self):
+    def options_exist(self) -> bool:
+        try:
+            cita_options = self.list_cita_options(
+                By.ID, self.data["checker"]["dropdown_selection_cita"]
+            )
+            available_options = self.check_available_options(cita_options)
+            return True if available_options else False
+        except Exception:
+            return False
+
+    def check_nie(self):
         self.driver.get(self.data["url"])
         select_element = self.check_visibility(
             By.ID, self.data["checker"]["tramites_policia_nactional"]
@@ -114,13 +128,7 @@ class Selenium:
         Time.random_sleep()
         self.click_element(By.ID, self.data["checker"]["solicitar_cita_id"])
         self.check_visibility(By.CLASS_NAME, self.data["checker"]["check_finale"])
-        try:
-            cita_options = self.list_cita_options(
-                By.ID, self.data["checker"]["dropdown_selection_cita"]
-            )
-            if len(cita_options) > 1:
-                print(f"OPZIONI TROVATE: {', '.join(cita_options)}")
-            else:
-                print("NESSUNA OPZIONE TROVATA")
-        except Exception:
-            print("NESSUNA OPZIONE TROVATA")
+        if self.options_exist():
+            self.logger.info("Options exist")
+        else:
+            self.logger.info("Options don't exist")
