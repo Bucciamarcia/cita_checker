@@ -1,6 +1,7 @@
 from py.shared.logger import get_logger
-import smtplib
-from email.message import EmailMessage
+import os
+import boto3
+from botocore.exceptions import ClientError
 from py.shared.data_reader import DataReader
 
 
@@ -20,20 +21,32 @@ class EmailHandler:
         self.subject = self.credentials["email_subject"]
         self.body_template = self.credentials["email_body"]
         self.body = self.body_template.format(opzioni=options)
+        os.environ["AWS_ACCESS_KEY_ID"] = self.secrets["aws_credentials"]["id"]
+        os.environ["AWS_SECRET_ACCESS_KEY"] = self.secrets["aws_credentials"]["key"]
+        self.region = self.secrets["aws_credentials"]["region"]
 
     def send_emails(self) -> None:
-        msg = EmailMessage()
-        msg["from"] = self.sender
-        msg["to"] = ", ".join(self.emails)
-        msg["subject"] = self.subject
-        msg.set_content(self.body)
-
+        client = boto3.client("ses", region_name=self.region)
         try:
-            with smtplib.SMTP(self.server, 465) as server:
-                server.starttls()
-                server.login(self.user, self.password)
-                server.send_message(msg)
-                self.logger.info("Email sent successfully.")
-        except Exception as e:
-            self.logger.error(f"Error sending email: {e}")
+            response = client.send_email(
+                Destination={
+                    "ToAddresses": self.emails,
+                },
+                Message={
+                    "Body": {
+                        "Text": {
+                            "Charset": "UTF-8",
+                            "Data": self.body,
+                        },
+                    },
+                    "Subject": {
+                        "Charset": "UTF-8",
+                        "Data": self.subject,
+                    },
+                },
+                Source=self.sender,
+            )
+            self.logger.info(f"Email sent! Message ID: {response['MessageId']}")
+        except ClientError as e:
+            self.logger.error(e.response["Error"]["Message"])
             raise e
