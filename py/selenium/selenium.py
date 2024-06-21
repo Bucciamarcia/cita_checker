@@ -99,15 +99,15 @@ class Selenium:
         available_options = [o for o in options if o in viable_options]
         return available_options
 
-    def options_exist(self) -> bool:
+    def options_exist(self) -> list[str]:
         try:
             cita_options = self.list_cita_options(
                 By.ID, self.data["checker"]["dropdown_selection_cita"]
             )
             available_options = self.check_available_options(cita_options)
-            return True if available_options else False
+            return available_options
         except Exception:
-            return False
+            return []
 
     def check_nie(self):
         self.driver.get(self.data["url"])
@@ -128,7 +128,4 @@ class Selenium:
         Time.random_sleep()
         self.click_element(By.ID, self.data["checker"]["solicitar_cita_id"])
         self.check_visibility(By.CLASS_NAME, self.data["checker"]["check_finale"])
-        if self.options_exist():
-            self.logger.info("Options exist")
-        else:
-            self.logger.info("Options don't exist")
+        return self.options_exist()
