@@ -11,5 +11,6 @@ class NieHander:
         if options:
             alert_hander = AlertHandler()
             alert_hander.show_notification("Opzioni NIE trovate!", f"Opzioni disponibili: {" ||| ".join(options)}")
+            email_hander = EmailHandler("test@test.com")
         else:
             self.logger.info("No NIE options found.")
