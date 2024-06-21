@@ -1,6 +1,7 @@
 import unittest
 from py.post_hander.post_hander import NieHander
 from py.post_hander.alert_handler import AlertHandler
+from py.post_hander.email_handler import EmailHandler
 
 
 class TestNieHander(unittest.TestCase):
@@ -36,6 +37,13 @@ class TestAlertHandler(unittest.TestCase):
             linux_hander.show_notification("Test", "Test message")
         except Exception as e:
             self.fail(f"show_notification failed on Linux: {e}")
+
+    def test_email_sender(self):
+        hander = EmailHandler("Option1 ||| Option2 ||| Option3")
+        try:
+            hander.send_emails()
+        except Exception as e:
+            self.fail(f"send_emails failed: {e}")
 
 
 if __name__ == "__main__":

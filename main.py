@@ -1,5 +1,7 @@
 from py.selenium.selenium import Selenium
 from py.post_hander.post_hander import NieHander
+from py.post_hander.email_handler import EmailHandler
+from py.shared.time import Time
 
 
 def nie():
@@ -9,9 +11,12 @@ def nie():
 
 
 def main():
-    nie()
+    while True:
+        nie()
+        Time.random_sleep(3300, 3900)
 
 
 if __name__ == "__main__":
     print("FROCIO CHI LEGGE")
-    main()
+    EmailHandler("Option1 ||| Option2 ||| Option3").send_emails()
+    # main()
