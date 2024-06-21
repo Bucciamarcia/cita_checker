@@ -1,4 +1,4 @@
 selenium
 webdriver_manager
 undetected_chromedriver
-distutils
+plyer
