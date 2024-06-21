@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from py.shared.time import Time
+from py.shared.time import TimeChecker as Time
 from py.shared.data_reader import DataReader
 from py.shared.random import Random
 
@@ -92,11 +92,14 @@ class Selenium:
         dropdown_element = self.driver.find_element(by, value)
         select = Select(dropdown_element)
         options = select.options
-        return [option.text for option in options]
+        options_text = [option.text for option in options]
+        self.logger.info(f"cita options: {" ||| ".join(options_text)}")
+        return options_text
 
     def check_available_options(self, options: list[str]) -> list[str]:
         viable_options = self.data["viable_options"]["asignacion_nie"]
         available_options = [o for o in options if o in viable_options]
+        self.logger.info(f"Available options: {" ||| ".join(available_options)}")
         return available_options
 
     def options_exist(self) -> list[str]:
