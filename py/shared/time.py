@@ -18,5 +18,5 @@ class TimeChecker:
         while True:
             if datetime.now().time() >= target_time:
                 break
-            sleep(60)
+            sleep(10)
         return
